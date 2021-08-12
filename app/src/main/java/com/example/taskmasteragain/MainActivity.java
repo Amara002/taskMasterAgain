@@ -3,10 +3,13 @@ package com.example.taskmasteragain;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,4 +59,36 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void clicksetting(View view) {
+        Intent clicksetting = new Intent(MainActivity.this, Setting.class);
+        MainActivity.this.startActivity(clicksetting);
+    }
+
+    public void clickbutton6(View view) {
+        Intent couseDetail = new Intent(this,TaskDetail.class);
+        couseDetail.putExtra("title", "javascript");
+        startActivity(couseDetail);
+    }
+
+    public void clickbutton5(View view) {
+        Intent couseDetail = new Intent(this,TaskDetail.class);
+        couseDetail.putExtra("title", "c++");
+        startActivity(couseDetail);
+
+    }
+
+    public void clickbutton4(View view) {
+        Intent couseDetail = new Intent(this,TaskDetail.class);
+        couseDetail.putExtra("title", "java");
+        startActivity(couseDetail);
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        TextView address = findViewById(R.id.textView);
+        address.setText(preferences.getString("nameKey", "") + "'s Task");
+    }
 }

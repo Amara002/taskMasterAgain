@@ -9,4 +9,12 @@
     <string name="all_task">All  Task</string>
     <string name="my_tasks">My Task</string>
     <string name="all_tasks">All Tasks</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="save">Save</string>
+    <string name="setting">Setting</string>
+    <string name="java">Java</string>
+    <string name="c">C++</string>
+    <string name="javascript">Javascript</string>
+    <string name="title">Title</string>
+    <string name="lorem">lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_quisque_nisl_eros_pulvinar_facilisis_justo_mollis_auctor_consequat_urna_morbi_a_bibendum_metus_donec_scelerisque_sollicitudin_enim_eu_venenatis</string>
 </resources>
