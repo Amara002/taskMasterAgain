@@ -30,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView TaskRecyclerView = findViewById(R.id.listTask);
 
 
-        TaskItem task1 = new TaskItem("Task1", " first task here", "in progress");
-        TaskItem task2 = new TaskItem("Task2", " second task here", "new");
-        TaskItem task3 = new TaskItem("Task3", " third task here", "completed");
-        TaskItem task4 = new TaskItem("Task4", " fourth task here", "assigned");
+        TaskItem task1 = new TaskItem("Task1", " first task ", "in progress");
+        TaskItem task2 = new TaskItem("Task2", " second task ", "new");
+        TaskItem task3 = new TaskItem("Task3", " third task ", "completed");
+        TaskItem task4 = new TaskItem("Task4", " fourth task ", "assigned");
 
 
         tasksList = new ArrayList<>();
