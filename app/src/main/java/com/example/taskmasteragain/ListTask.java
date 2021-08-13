@@ -27,11 +27,10 @@ public class ListTask extends AppCompatActivity {
         RecyclerView TaskRecyclerView = findViewById(R.id.list2);
 
 
-        TaskItem task1 = new TaskItem("Display Username", "this is the first task", "in progress");
-        TaskItem task2 = new TaskItem("Pass values to task detail", "this is the second task", "new");
-        TaskItem task3 = new TaskItem("implement task adapter", "this is the third task", "completed");
-        TaskItem task4 = new TaskItem("create task class", "this is the fourth task", "assigned");
-
+        TaskItem task1 = new TaskItem("Task1", " first task ", "in progress");
+        TaskItem task2 = new TaskItem("Task2", " second task ", "new");
+        TaskItem task3 = new TaskItem("Task3", " third task ", "completed");
+        TaskItem task4 = new TaskItem("Task4", " fourth task ", "assigned");
 
         tasksList = new ArrayList<>();
         tasksList.add(task1);
