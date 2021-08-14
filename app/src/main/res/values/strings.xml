@@ -26,7 +26,7 @@
     <!--    <item name="delete_list" type="id">delete</item>-->
     <string-array name="tasks">
         <item>Task1</item>
-        <item>Humus</item>
-        <item>Hamburger</item>
+        <item>Task2</item>
+        <item>Task3</item>
     </string-array>
 </resources>

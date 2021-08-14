@@ -33,8 +33,8 @@ public class AddTask extends AppCompatActivity {
 
 
         imageIconDatabase.put("Task1", R.drawable.ic_tasks);
-//        imageIconDatabase.put("Humus", R.drawable.ic__03_hummus);
-//        imageIconDatabase.put("Hamburger", R.drawable.ic_hamburger);
+        imageIconDatabase.put("Task2", R.drawable.ic_list);
+        imageIconDatabase.put("Task3", R.drawable.ic_to_do_list);
 
         database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, TASK_LIST)
                 .allowMainThreadQueries().build();
