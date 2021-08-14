@@ -24,7 +24,7 @@ public class TaskAdapter  extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     public interface OnTaskItemClickListener {
         void onItemClicked(int position);
-//        void onDeleteItem(int position);
+        void onDeleteItem(int position);
     }
 
 
@@ -42,6 +42,7 @@ public class TaskAdapter  extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.title.setText(item.getTitle());
         holder.body.setText(item.getBody());
         holder.state.setText(item.getState());
+        holder.image.setImageResource(item.getImage());
 
     }
 
@@ -56,6 +57,8 @@ public class TaskAdapter  extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         private TextView title;
         private TextView body;
         private TextView state;
+        private TextView delete;
+
         ViewHolder (@NonNull View itemView,  OnTaskItemClickListener listener){
             super(itemView);
 
@@ -63,12 +66,21 @@ public class TaskAdapter  extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             title = itemView.findViewById(R.id.title_list);
             body = itemView.findViewById(R.id.body_list);
             state = itemView.findViewById(R.id.state_list);
+            delete = itemView.findViewById(R.id.delete_list);
+
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClicked(getAdapterPosition());
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onDeleteItem(getAdapterPosition());
                 }
             });
 

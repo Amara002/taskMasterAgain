@@ -63,6 +63,17 @@
             tools:layout_editor_absoluteX="180dp"
             tools:layout_editor_absoluteY="328dp" />
 
+        <TextView
+            android:id="@+id/delete_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="138dp"
+            android:layout_marginBottom="14dp"
+            android:text="Delete"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

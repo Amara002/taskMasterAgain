@@ -17,8 +17,16 @@
     <string name="javascript">Javascript</string>
     <string name="title">Title</string>
     <string name="lorem">lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_quisque_nisl_eros_pulvinar_facilisis_justo_mollis_auctor_consequat_urna_morbi_a_bibendum_metus_donec_scelerisque_sollicitudin_enim_eu_venenatis</string>
-    <string name="Title">TextView</string>
-    <string name="Body">TextView</string>
-    <string name="State">TextView</string>
+    <string name="Title">Title</string>
+    <string name="Body">Body</string>
+    <string name="State">State</string>
     <string name="task_detail">Task Detail</string>
+    <string name="name">Name</string>
+    <string name="image">Image</string>
+    <!--    <item name="delete_list" type="id">delete</item>-->
+    <string-array name="tasks">
+        <item>Task1</item>
+        <item>Humus</item>
+        <item>Hamburger</item>
+    </string-array>
 </resources>
