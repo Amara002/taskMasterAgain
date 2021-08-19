@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 tasksList.remove(position);
                 notifyDatasetChanged();
                 Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
+
             }
 
 
@@ -151,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(couseDetail);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onResume() {
 

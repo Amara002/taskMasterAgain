@@ -15,7 +15,7 @@
         android:layout_marginTop="196dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/enter_name"
+        android:hint="@string/enter_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.402"
         app:layout_constraintStart_toStartOf="parent"

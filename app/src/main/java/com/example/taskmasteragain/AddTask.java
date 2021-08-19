@@ -3,6 +3,7 @@ package com.example.taskmasteragain;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -83,6 +84,9 @@ public class AddTask extends AppCompatActivity {
                 taskDao.insertOne(taskItem);
                 Toast buttonToast=Toast.makeText(AddTask.this,"submitted!",Toast.LENGTH_SHORT);
                 buttonToast.show();
+                Intent addTaskPage=new Intent(AddTask.this,MainActivity.class);
+                startActivity(addTaskPage);
+             
 
             }
         });
