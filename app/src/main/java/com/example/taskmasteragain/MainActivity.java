@@ -10,11 +10,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +29,30 @@ public class MainActivity extends AppCompatActivity {
     public static final String TASK_TITLE = "task_title";
     public static final String TASK_BODY = "task_body";
     public static final String TASK_STATE = "task_state";
-    private List<TaskItem> tasksList;
-    private TaskAdapter adapter;
+//    private List<TaskItem> tasksList;
+//    private TaskAdapter adapter;
 
 
-    private TaskDao taskDao;
-    private TaskDatabase db;
+    //    private TaskDao taskDao;
+//    private TaskDatabase db;
+    public static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RecyclerView TaskRecyclerView = findViewById(R.id.listTask);
+        configureAmplify();
+////        lab32
+//        // configure Amplify plugins
+//        try {
+//            Amplify.addPlugin(new AWSDataStorePlugin());
+//            Amplify.addPlugin(new AWSApiPlugin());
+//            Amplify.configure(getApplicationContext());
+//            Log.i(TAG, "onCreate: Successfully initialized Amplify plugins");
+//        } catch (AmplifyException exception) {
+//            Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
+//        }
+//        RecyclerView TaskRecyclerView = findViewById(R.id.listTask);
 
 //
 //        TaskItem task1 = new TaskItem("Task1", " first task ", "in progress");
@@ -48,54 +66,54 @@ public class MainActivity extends AppCompatActivity {
 //        tasksList.add(task2);
 //        tasksList.add(task3);
 //        tasksList.add(task4);
-        db = Room.databaseBuilder(getApplicationContext(),
-                TaskDatabase.class, AddTask.TASK_LIST).allowMainThreadQueries().build();
+//        db = Room.databaseBuilder(getApplicationContext(),
+//                TaskDatabase.class, AddTask.TASK_LIST).allowMainThreadQueries().build();
+//
+//        // can be pulled from the network or a local database
+//        taskDao = db.taskDao();
+//        tasksList = taskDao.findAll();
 
-        // can be pulled from the network or a local database
-        taskDao = db.taskDao();
-        tasksList = taskDao.findAll();
+//        adapter = new TaskAdapter(tasksList, new TaskAdapter.OnTaskItemClickListener() {
+//            @Override
+//            public void onItemClicked(int position) {
+//                Intent goToDetailsIntent = new Intent(getApplicationContext(), TaskDetail.class);
+//                goToDetailsIntent.putExtra(TASK_TITLE, tasksList.get(position).getTitle());
+//                goToDetailsIntent.putExtra(TASK_BODY, tasksList.get(position).getBody());
+//                goToDetailsIntent.putExtra(TASK_STATE, tasksList.get(position).getState());
+//                startActivity(goToDetailsIntent);
 
-        adapter = new TaskAdapter(tasksList, new TaskAdapter.OnTaskItemClickListener() {
-            @Override
-            public void onItemClicked(int position) {
-                Intent goToDetailsIntent = new Intent(getApplicationContext(), TaskDetail.class);
-                goToDetailsIntent.putExtra(TASK_TITLE, tasksList.get(position).getTitle());
-                goToDetailsIntent.putExtra(TASK_BODY, tasksList.get(position).getBody());
-                goToDetailsIntent.putExtra(TASK_STATE, tasksList.get(position).getState());
-                startActivity(goToDetailsIntent);
-
-            }
-            @Override
-            public void onDeleteItem(int position) {
-                taskDao.delete(tasksList.get(position));
-                tasksList.remove(position);
-                notifyDatasetChanged();
-                Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
-
-            }
-
-
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
-                this,
-                LinearLayoutManager.VERTICAL,
-                false);
-
-        TaskRecyclerView.setLayoutManager(linearLayoutManager);
-        TaskRecyclerView.setAdapter(adapter);
     }
+//            @Override
+//            public void onDeleteItem(int position) {
+//                taskDao.delete(tasksList.get(position));
+//                tasksList.remove(position);
+//                notifyDatasetChanged();
+//                Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
+//
+//            }
 
-    private void notifyDatasetChanged() {
-        adapter.notifyDataSetChanged();
-    }
+
+//        });
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
+//                this,
+//                LinearLayoutManager.VERTICAL,
+//                false);
+//
+//        TaskRecyclerView.setLayoutManager(linearLayoutManager);
+//        TaskRecyclerView.setAdapter(adapter);
+//    }
+
+//    private void notifyDatasetChanged() {
+//        adapter.notifyDataSetChanged();
+//    }
 
     public void allTasks(View view) {
-        Intent showAllTasks=new Intent(MainActivity.this,AllTask.class);
+        Intent showAllTasks = new Intent(MainActivity.this, AllTask.class);
         startActivity(showAllTasks);
     }
 
     public void addTask(View view) {
-        Intent addTaskPage=new Intent(MainActivity.this,AddTask.class);
+        Intent addTaskPage = new Intent(MainActivity.this, AddTask.class);
         startActivity(addTaskPage);
     }
 
@@ -135,20 +153,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickbutton6(View view) {
-        Intent couseDetail = new Intent(this,TaskDetail.class);
+        Intent couseDetail = new Intent(this, TaskDetail.class);
         couseDetail.putExtra("title", "javascript");
         startActivity(couseDetail);
     }
 
     public void clickbutton5(View view) {
-        Intent couseDetail = new Intent(this,TaskDetail.class);
+        Intent couseDetail = new Intent(this, TaskDetail.class);
         couseDetail.putExtra("title", "c++");
         startActivity(couseDetail);
 
     }
 
     public void clickbutton4(View view) {
-        Intent couseDetail = new Intent(this,TaskDetail.class);
+        Intent couseDetail = new Intent(this, TaskDetail.class);
         couseDetail.putExtra("title", "java");
         startActivity(couseDetail);
     }
@@ -161,5 +179,17 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         TextView address = findViewById(R.id.textView);
         address.setText(preferences.getString("nameKey", "") + "'s Task");
+    }
+
+    private void configureAmplify() {
+        // configure Amplify plugins
+        try {
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.configure(getApplicationContext());
+            Log.i(TAG, "onCreate: Successfully initialized Amplify plugins");
+        } catch (AmplifyException exception) {
+            Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
+        }
     }
 }
