@@ -5,12 +5,12 @@
         android:id="@+id/allMenu"
         android:orderInCategory="100"
         android:title="Setting"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/addMenu"
         android:orderInCategory="200"
         android:title="List Task"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
 
 </menu>
