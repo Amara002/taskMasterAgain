@@ -14,3 +14,17 @@ type Task @model {
   body: String
   state: String
 }
+
+type Team @model {
+  id: ID!
+  name: String!
+  tasks: [TaskTeam] @connection(keyName: "taskTeam" , fields: ["id"])
+}
+
+type TaskTeam @model @key(name: "taskTeam" , fields: ["teamId"]){
+  id: ID!
+  teamId: ID!
+  title: String
+  description: String
+  team: Team! @connection(fields: ["teamId"] )
+}
