@@ -92,9 +92,9 @@ public class ListTask extends AppCompatActivity {
             @Override
             public void onItemClicked(int position) {
                 Intent goToDetailsIntent = new Intent(getApplicationContext(), TaskDetail.class);
-                goToDetailsIntent.putExtra("Title", tasks.get(position).getTitle());
-                goToDetailsIntent.putExtra("Body", tasks.get(position).getBody());
-                goToDetailsIntent.putExtra("State", tasks.get(position).getState());
+                goToDetailsIntent.putExtra("taskTitle", tasks.get(position).getTitle());
+                goToDetailsIntent.putExtra("taskBody", tasks.get(position).getBody());
+                goToDetailsIntent.putExtra("taskState", tasks.get(position).getState());
                 startActivity(goToDetailsIntent);
             }
 
