@@ -2,9 +2,23 @@
 subscription OnCreateTask {
   onCreateTask {
     id
+    teamId
     title
     body
     state
+    team {
+      id
+      teamName
+      tasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -15,9 +29,23 @@ subscription OnCreateTask {
 subscription OnUpdateTask {
   onUpdateTask {
     id
+    teamId
     title
     body
     state
+    team {
+      id
+      teamName
+      tasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -28,9 +56,104 @@ subscription OnUpdateTask {
 subscription OnDeleteTask {
   onDeleteTask {
     id
+    teamId
     title
     body
     state
+    team {
+      id
+      teamName
+      tasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateTeam {
+  onCreateTeam {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        teamId
+        title
+        body
+        state
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateTeam {
+  onUpdateTeam {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        teamId
+        title
+        body
+        state
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteTeam {
+  onDeleteTeam {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        teamId
+        title
+        body
+        state
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt

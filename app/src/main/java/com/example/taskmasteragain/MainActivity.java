@@ -28,223 +28,150 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String TASK_TITLE = "task_title";
-    public static final String TASK_BODY = "task_body";
-    public static final String TASK_STATE = "task_state";
-//    private List<TaskItem> tasksList;
-//    private TaskAdapter adapter;
 
+
+    private static final String TAG = "MainActivity";
+
+    private List<TaskItem> tasks;
+    private TaskAdapter adapter;
 
     private TaskDao taskDao;
-    private TaskDatabase db;
-    private TaskAdapter adapter;
-    public static final String TAG = "MainActivity";
+
     private Handler handler;
-    private RecyclerView TaskRecyclerView;
-    private List<TaskItem> taskItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Task Master App");
 
-        RecyclerView TaskRecyclerView = findViewById(R.id.listTask);
-        configureAmplify();
-
-        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public boolean handleMessage(@NonNull Message message) {
-//                        TaskRecyclerView.getAdapter().notifyDataSetChanged();
-                Objects.requireNonNull(TaskRecyclerView.getAdapter()).notifyDataSetChanged();
-                return false;
-            }
+        handler = new Handler(message -> {
+            notifyDataSetChanged();
+            return false;
         });
 
 
-////        lab32
-//        TaskItem task1 = new TaskItem("Task1", " first task ", "in progress");
-//        TaskItem task2 = new TaskItem("Task2", " second task ", "new");
-//        TaskItem task3 = new TaskItem("Task3", " third task ", "completed");
-//        TaskItem task4 = new TaskItem("Task4", " fourth task ", "assigned");
-//
-//
-//        tasksList = new ArrayList<>();
-//        tasksList.add(task1);
-//        tasksList.add(task2);
-//        tasksList.add(task3);
-//        tasksList.add(task4);
-//        db = Room.databaseBuilder(getApplicationContext(),
-//                TaskDatabase.class, AddTask.TASK_LIST).allowMainThreadQueries().build();
+        configureAmplify();
 
-        // can be pulled from the network or a local database
-//          taskDao = db.taskDao();
-//          tasksList = taskDao.findAll();
-        taskItemList = new ArrayList<>();
-        getTaskDataFromAPI();
-         adapter = new TaskAdapter(taskItemList, new TaskAdapter.OnTaskItemClickListener() {
+
+
+        TaskDatabase database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, "task_List")
+                .allowMainThreadQueries().build();
+        taskDao = database.taskDao();
+
+
+        // Add Task Button listener
+        findViewById(R.id.button).setOnClickListener(view -> {
+            Intent goToAddTask = new Intent(MainActivity.this, AddTask.class);
+            startActivity(goToAddTask);
+        });
+
+        // all tasks Button listener
+        findViewById(R.id.button3).setOnClickListener(view -> {
+            Intent goToAllTask = new Intent(MainActivity.this, AllTask.class);
+            startActivity(goToAllTask);
+        });
+
+        //  settings  Button listener
+        findViewById(R.id.button8).setOnClickListener(view -> {
+            Intent goToSettings = new Intent(MainActivity.this, Setting.class);
+            startActivity(goToSettings);
+        });
+
+        //  Team tasks through list task button
+        findViewById(R.id.button4).setOnClickListener(view -> {
+            Intent goListTask = new Intent(MainActivity.this, ListTask.class);
+            startActivity(goListTask);
+        });
+
+        // save Teams to API
+        saveTeamToApi("Team 1");
+        saveTeamToApi("Team 2");
+        saveTeamToApi("Team 3");
+
+    }
+
+    private void listItemDeleted() {
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+//    public void showDetails(String taskName) {
+//        Intent intent = new Intent(MainActivity.this, TaskDetail.class);
+//        intent.putExtra("taskName", taskName);
+//        startActivity(intent);
+//    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String username = sharedPreferences.getString("username", "");
+        String teamName = sharedPreferences.getString("teamName", "");
+
+        if (!username.equals("")) {
+            ((TextView) findViewById(R.id.textView)).setText(username + "'s Tasks");
+        }
+
+        tasks = new ArrayList<>();
+        if (teamName.equals("")) {
+            getTasksDataFromAPI();
+        } else {
+            ((TextView) findViewById(R.id.textView0)).setText(teamName + " Tasks");
+            getTeamTasksFromAPI(teamName);
+        }
+
+//        tasks = new ArrayList<>();
+//        if (teamName.equals("")) {
+//            getTasksDataFromAPI();
+//        } else {
+//            getTeamTasksFromAPI(teamName);
+//        }
+
+        Log.i(TAG, "onResume: tasks " + tasks);
+
+        RecyclerView taskRecyclerView = findViewById(R.id.listTask);
+        adapter = new TaskAdapter(tasks, new TaskAdapter.OnTaskItemClickListener() {
             @Override
             public void onItemClicked(int position) {
                 Intent goToDetailsIntent = new Intent(getApplicationContext(), TaskDetail.class);
-                goToDetailsIntent.putExtra(TASK_TITLE, taskItemList.get(position).getTitle());
-                goToDetailsIntent.putExtra(TASK_BODY, taskItemList.get(position).getBody());
-                goToDetailsIntent.putExtra(TASK_STATE, taskItemList.get(position).getState());
+                goToDetailsIntent.putExtra("Title", tasks.get(position).getTitle());
+                goToDetailsIntent.putExtra("Body", tasks.get(position).getBody());
+                goToDetailsIntent.putExtra("State", tasks.get(position).getState());
                 startActivity(goToDetailsIntent);
+            }
 
-    }
             @Override
-          public void onDeleteItem(int position) {
-//                List<TaskItem> taskItemLists = new ArrayList<>();
-                List<Task> tasks = new ArrayList<>();
-                Amplify.API.mutate(ModelMutation.delete(tasks.get(position)),
-                        response -> Log.i(TAG, "Deleted successfully"),
-                        error -> Log.e(TAG, "Delete failed", error)
-                );
-                Amplify.DataStore.delete(tasks.get(position),
-                        success -> Log.i(TAG, "Deleted successfully" + success.item().toString()),
-                        failure -> Log.e(TAG, "Delete failed", failure));
+            public void onDeleteItem(int position) {
+
+                taskDao.delete(tasks.get(position));
 
                 tasks.remove(position);
-                Log.i(TAG, "onDeleteItem: our list =>>>> " + tasks.toString());
-//                notifyDatasetChanged();
-                //                taskDao.delete(taskItemList.get(position));
-//                taskItemList.remove(position);
-//
-////                dataSetChanged();
-////                Toast.makeText(ListTask.this, "Item deleted", Toast.LENGTH_SHORT).show();
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Item deleted",
-                        Toast.LENGTH_LONG);
-                toast.show();
-                notifyDataSetChanged();
-           }
+                listItemDeleted();
 
 
+            }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
                 this,
                 LinearLayoutManager.VERTICAL,
                 false);
-
-        TaskRecyclerView.setLayoutManager(linearLayoutManager);
-        TaskRecyclerView.setAdapter(adapter);
-    }
-
-//        private void notifyDatasetChanged() {
-//        adapter.notifyDataSetChanged();
-//    }
-    @SuppressLint("NotifyDataSetChanged")
-    private void notifyDataSetChanged() {
-        adapter.notifyDataSetChanged();
-    }
-
-    private void getTaskDataFromAPI() {
-        List<TaskItem> taskItemLists = new ArrayList<>();
-        Amplify.API.query(ModelQuery.list(Task.class),
-                response -> {
-                    for (Task task : response.getData()) {
-                        taskItemList.add(new TaskItem(task.getTitle(), task.getBody(), task.getState()));
-                        Log.i(TAG, "onCreate: the tasks are => " + task.getTitle());
-                    }
-                    handler.sendEmptyMessage(1);
-                },
-                error -> {
-                    Log.e(TAG, "onCreate: Failed to get tasks => " + error.toString());
-                    taskItemList = showTasksSavedInDataBase();
-                    handler.sendEmptyMessage(1);
-                });
-    }
-
-    private List<TaskItem> showTasksSavedInDataBase() {
-        TaskDatabase taskDatabase = Room.databaseBuilder(this, TaskDatabase.class, "tasks")
-                .allowMainThreadQueries().build();
-        TaskDao taskDao = taskDatabase.taskDao();
-        return taskDao.findAll();
-
-    }
-
-    public void allTasks(View view) {
-        Intent showAllTasks = new Intent(MainActivity.this, AllTask.class);
-        startActivity(showAllTasks);
-    }
-
-    public void addTask(View view) {
-        Intent addTaskPage = new Intent(MainActivity.this, AddTask.class);
-        startActivity(addTaskPage);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.allMenu) {
-            Intent allint = new Intent(this, Setting.class);
-            startActivity(allint);
-            return true;
-        }
-
-        if (id == R.id.addMenu) {
-            Intent add1Intent = new Intent(this, ListTask.class);
-            startActivity(add1Intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void clicksetting(View view) {
-        Intent clicksetting = new Intent(MainActivity.this, Setting.class);
-        MainActivity.this.startActivity(clicksetting);
-    }
-
-    public void clickbutton6(View view) {
-        Intent couseDetail = new Intent(this, TaskDetail.class);
-        couseDetail.putExtra("title", "javascript");
-        startActivity(couseDetail);
-    }
-
-    public void clickbutton5(View view) {
-        Intent couseDetail = new Intent(this, TaskDetail.class);
-        couseDetail.putExtra("title", "c++");
-        startActivity(couseDetail);
-
-    }
-
-    public void clickbutton4(View view) {
-        Intent couseDetail = new Intent(this, TaskDetail.class);
-        couseDetail.putExtra("title", "java");
-        startActivity(couseDetail);
-    }
-
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onResume() {
-
-        super.onResume();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        TextView address = findViewById(R.id.textView);
-        address.setText(preferences.getString("nameKey", "") + "'s Task");
+        taskRecyclerView.setLayoutManager(linearLayoutManager);
+        taskRecyclerView.setAdapter(adapter);
     }
 
     private void configureAmplify() {
-        // configure Amplify plugins
+
         try {
             Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.addPlugin(new AWSApiPlugin());
@@ -254,4 +181,90 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
         }
     }
+
+    private void getTasksDataFromAPI() {
+        Amplify.API.query(ModelQuery.list(com.amplifyframework.datastore.generated.model.Task.class),
+                response -> {
+                    for (com.amplifyframework.datastore.generated.model.Task task : response.getData()) {
+                        tasks.add(new TaskItem(task.getTitle(), task.getBody(), task.getState()));
+                        Log.i(TAG, "onCreate: the Tasks DynamoDB are => " + task.getTitle());
+                    }
+                    handler.sendEmptyMessage(1);
+                },
+                error -> Log.e(TAG, "onCreate: Failed to get Tasks from DynamoDB => " + error.toString())
+        );
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void notifyDataSetChanged() {
+        adapter.notifyDataSetChanged();
+    }
+
+
+    public void saveTeamToApi(String teamName) {
+        Team team = Team.builder().teamName(teamName).build();
+
+        Amplify.API.query(ModelQuery.list(Team.class, Team.TEAM_NAME.contains(teamName)),
+                response -> {
+                    List<Team> teams = (List<Team>) response.getData().getItems();
+
+                    if (teams.isEmpty()) {
+                        Amplify.API.mutate(ModelMutation.create(team),
+                                success -> Log.i(TAG, "Saved Team => " + team.getTeamName()),
+                                error -> Log.e(TAG, "Could not save Team to API => ", error));
+                    }
+                },
+                error -> Log.e(TAG, "Failed to get Team from DynamoDB => " + error.toString())
+        );
+
+    }
+
+    private void getTeamTasksFromAPI(String teamName) {
+        Amplify.API.query(ModelQuery.list(com.amplifyframework.datastore.generated.model.Task.class),
+                response -> {
+                    for (com.amplifyframework.datastore.generated.model.Task task : response.getData()) {
+
+                        if ((task.getTeam().getTeamName()).equals(teamName)) {
+                            tasks.add(new TaskItem(task.getTitle(), task.getBody(), task.getState()));
+                            Log.i(TAG, "onCreate: the Tasks DynamoDB are => " + task.getTitle());
+                            Log.i(TAG, "onCreate: the team DynamoDB are => " + task.getTeam().getTeamName());
+                        }
+                    }
+                    handler.sendEmptyMessage(1);
+                },
+                error -> Log.e(TAG, "onCreate: Failed to get Tasks from DynamoDB => " + error.toString())
+        );
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.Add_Task) {
+            Intent addTaskPage=new Intent(MainActivity.this,AddTask.class);
+            startActivity(addTaskPage);
+            return true;
+        }
+
+        if (id == R.id.allMenu) {
+            Intent allTaskPage=new Intent(MainActivity.this,ListTask.class);
+            startActivity(allTaskPage);
+            return true;
+        }
+
+        if (id == R.id.settings) {
+            Intent settingsPage=new Intent(MainActivity.this,Setting.class);
+            startActivity(settingsPage);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

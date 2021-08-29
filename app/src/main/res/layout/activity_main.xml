@@ -9,18 +9,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listTask"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="328dp"
+        android:layout_height="262dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.067"
+        app:layout_constraintTop_toBottomOf="@+id/textView0"
+        app:layout_constraintVertical_bias="0.062"
         tools:ignore="MissingConstraints">
 
     </androidx.recyclerview.widget.RecyclerView>
@@ -31,7 +30,6 @@
         android:layout_height="52dp"
         android:layout_marginEnd="28dp"
         android:layout_marginBottom="10dp"
-        android:onClick="allTasks"
         android:text="@string/all_tasks"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,21 +52,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.435" />
 
+    <TextView
+        android:id="@+id/textView0"
+        android:layout_width="179dp"
+        android:layout_height="83dp"
+        android:layout_marginBottom="500dp"
+        android:text="@string/team_name"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.168"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0" />
+
     <Button
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="70dp"
         android:layout_marginBottom="20dp"
-        android:onClick="clickbutton4"
-        android:text="@string/java"
+        android:text="@string/list_task"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button5"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
+        app:layout_constraintVertical_bias="0.817" />
 
     <Button
         android:id="@+id/button"
@@ -76,7 +84,6 @@
         android:layout_height="52dp"
         android:layout_marginStart="48dp"
         android:layout_marginBottom="10dp"
-        android:onClick="addTask"
         android:text="@string/add_task"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,42 +91,13 @@
         app:layout_constraintVertical_bias="0.92" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="20dp"
-        android:onClick="clickbutton5"
-        android:text="@string/c"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="20dp"
-        android:onClick="clickbutton6"
-        android:text="@string/javascript"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.803" />
-
-    <Button
         android:id="@+id/button8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
-        android:onClick="clicksetting"
         android:text="@string/setting"
-        app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.921"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

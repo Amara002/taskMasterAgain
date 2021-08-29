@@ -3,149 +3,131 @@ package com.example.taskmasteragain;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
+import android.content.SharedPreferences;
+
 import android.os.Bundle;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
+
+
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+
 import android.widget.EditText;
 import android.widget.Spinner;
+
 import android.widget.Toast;
 
-import com.amplifyframework.AmplifyException;
-import com.amplifyframework.api.aws.AWSApiPlugin;
-import com.amplifyframework.api.graphql.model.ModelMutation;
-import com.amplifyframework.core.Amplify;
-import com.amplifyframework.datastore.AWSDataStorePlugin;
-import com.amplifyframework.datastore.generated.model.Task;
-import com.example.taskmasteragain.data.TaskDataManger;
 
-import java.util.HashMap;
+
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+
+import com.amplifyframework.datastore.generated.model.Team;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddTask extends AppCompatActivity {
 
-    public static final String TASK_LIST = "task-list";
-    private static final String TAG = "AddTask";
+
+    private static final String TAG = "AddTaskActivity";
+
     private TaskDao taskDao;
-    private TaskDatabase database;
-    private int taskItemImage;
 
-    private static HashMap<String, Integer> imageIconDatabase = new HashMap<>();
+    private String teamId = "";
 
+    private final List<Team> teams = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-//        configureAmplify();
+        setTitle("Add Task");
+        getAllTeamsDataFromAPI();
 
-        imageIconDatabase.put("Task1", R.drawable.ic_tasks);
-        imageIconDatabase.put("Task2", R.drawable.ic_list);
-        imageIconDatabase.put("Task3", R.drawable.ic_to_do_list);
 
-        database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, TASK_LIST)
+        Spinner teamsList = findViewById(R.id.spinnerTeam);
+        String[] teams = new String[]{"Team 1", "Team 2", "Team 3"};
+        ArrayAdapter<String> TeamsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, teams);
+        teamsList.setAdapter(TeamsAdapter);
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+
+
+        TaskDatabase database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, "task_List")
                 .allowMainThreadQueries().build();
         taskDao = database.taskDao();
 
-        Spinner spinner = findViewById(R.id.spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.tasks, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        // add task button listener
+        findViewById(R.id.addbutton).setOnClickListener(view -> {
+            String taskTitle = ((EditText) findViewById(R.id.editItemTitle)).getText().toString();
+            String taskBody = ((EditText) findViewById(R.id.editTextBody)).getText().toString();
+            String taskState = ((EditText) findViewById(R.id.editTextState)).getText().toString();
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                String text = (String) adapterView.getItemAtPosition(position);
+            Spinner teamSpinner = (Spinner) findViewById(R.id.spinnerTeam);
+            String teamName = teamSpinner.getSelectedItem().toString();
 
-                taskItemImage = imageIconDatabase.get(text);
-                Log.i(TAG, "onItemSelected: " + text);
-            }
+            preferenceEditor.putString("teamName", teamName);
+            preferenceEditor.apply();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
 
-            }
+            TaskItem newTask = new TaskItem(taskTitle, taskBody, taskState);
+            taskDao.insertOne(newTask);
+
+            Log.i(TAG, "on button Listener the team id is >>>>> " + getTeamId(teamName));
+
+
+            addTaskToDynamoDB(taskTitle,
+                    taskBody,
+                    taskState,
+                    new Team(getTeamId(teamName), teamName));
+
         });
 
-        Button addButton = findViewById(R.id.addbutton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText inputTitle = findViewById(R.id.editItemTitle);
-                EditText inputBody = findViewById(R.id.editTextBody);
-                EditText inputState = findViewById(R.id.editTextState);
-
-                String title = inputTitle.getText().toString();
-                String body = inputBody.getText().toString();
-                String state = inputState.getText().toString();
-
-//                create Task Item
-                Task task = Task.builder()
-                        .title(title)
-                        .body(body)
-                        .state(state)
-                        .build();
-
-                if (isNetworkAvailable(getApplicationContext())) {
-                    Log.i(TAG, "onClick: the network is available");
-                } else {
-                    Log.i(TAG, "onClick: net down");
-                }
-
-                saveTaskToAPI(task);
-                TaskDataManger.getInstance().getData().add(new TaskItem(task.getTitle() , task.getBody(),task.getState()));
-                Toast.makeText(AddTask.this, "Task saved", Toast.LENGTH_SHORT).show();
-
-
-                // save data
-                TaskItem taskItem = new TaskItem(title, body, state);
-                taskItem.setImage(taskItemImage);
-                taskDao.insertOne(taskItem);
-//                Toast buttonToast=Toast.makeText(AddTask.this,"submitted!",Toast.LENGTH_SHORT);
-//                buttonToast.show();
-                Intent addTaskPage=new Intent(AddTask.this,ListTask.class);
-                startActivity(addTaskPage);
-
-
-            }
-        });
 
     }
 
-//    private void configureAmplify() {
-//        // configure Amplify plugins
-//        try {
-//            Amplify.addPlugin(new AWSDataStorePlugin());
-//            Amplify.addPlugin(new AWSApiPlugin());
-//            Amplify.configure(getApplicationContext());
-//            Log.i(TAG, "onCreate: Successfully initialized Amplify plugins");
-//        } catch (AmplifyException exception) {
-//            Log.e(TAG, "onCreate: Failed to initialize Amplify plugins => " + exception.toString());
-//        }
-//    }
+    public void addTaskToDynamoDB(String taskTitle, String taskBody, String taskState, Team team) {
+        com.amplifyframework.datastore.generated.model.Task task = com.amplifyframework.datastore.generated.model.Task.builder()
+                .title(taskTitle)
+                .body(taskBody)
+                .state(taskState)
+                .team(team)
+                .build();
 
-    public Task saveTaskToAPI(Task task) {
         Amplify.API.mutate(ModelMutation.create(task),
                 success -> Log.i(TAG, "Saved item: " + task.getTitle()),
-                error -> Log.e(TAG, "Could not save item to API/dynamodb" + task.getTitle()));
-        return task;
+                error -> Log.e(TAG, "Could not save item to API", error));
 
+        Toast toast = Toast.makeText(this, "submitted!", Toast.LENGTH_LONG);
+        toast.show();
     }
 
-    public boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager =
-                ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager
-                .getActiveNetworkInfo().isConnected();
+    private void getAllTeamsDataFromAPI() {
+        Amplify.API.query(ModelQuery.list(Team.class),
+                response -> {
+                    for (Team team : response.getData()) {
+                        teams.add(team);
+                        Log.i(TAG, "the team id DynamoDB are => " + team.getTeamName() + "  " + team.getId());
+                    }
+                },
+                error -> Log.e(TAG, "onCreate: Failed to get team from DynamoDB => " + error.toString())
+        );
+    }
+
+    public String getTeamId(String teamName) {
+        for (Team team : teams) {
+            if (team.getTeamName().equals(teamName)) {
+                return team.getId();
+            }
+        }
+        return "";
     }
 
 }
