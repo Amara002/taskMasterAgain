@@ -3,6 +3,7 @@ package com.example.taskmasteragain;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import android.os.Bundle;
@@ -107,6 +108,8 @@ public class AddTask extends AppCompatActivity {
 
         Toast toast = Toast.makeText(this, "submitted!", Toast.LENGTH_LONG);
         toast.show();
+        Intent addTaskPage=new Intent(AddTask.this,MainActivity.class);
+        startActivity(addTaskPage);
     }
 
     private void getAllTeamsDataFromAPI() {

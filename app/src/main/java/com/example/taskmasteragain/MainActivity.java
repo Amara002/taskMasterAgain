@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         String teamName = sharedPreferences.getString("teamName", "");
 
         if (!username.equals("")) {
-            ((TextView) findViewById(R.id.textView)).setText(username + "'s Tasks");
+            ((TextView) findViewById(R.id.textView)).setText(username + "'s Task");
         }
 
         tasks = new ArrayList<>();
@@ -145,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(int position) {
                 Intent goToDetailsIntent = new Intent(getApplicationContext(), TaskDetail.class);
-                goToDetailsIntent.putExtra("Title", tasks.get(position).getTitle());
-                goToDetailsIntent.putExtra("Body", tasks.get(position).getBody());
-                goToDetailsIntent.putExtra("State", tasks.get(position).getState());
+                goToDetailsIntent.putExtra("taskTitle", tasks.get(position).getTitle());
+                goToDetailsIntent.putExtra("taskBody", tasks.get(position).getBody());
+                goToDetailsIntent.putExtra("taskState", tasks.get(position).getState());
                 startActivity(goToDetailsIntent);
             }
 
