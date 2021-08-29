@@ -108,8 +108,7 @@ public class AddTask extends AppCompatActivity {
 
         Toast toast = Toast.makeText(this, "submitted!", Toast.LENGTH_LONG);
         toast.show();
-        Intent addTaskPage=new Intent(AddTask.this,MainActivity.class);
-        startActivity(addTaskPage);
+       
     }
 
     private void getAllTeamsDataFromAPI() {
