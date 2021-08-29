@@ -23,10 +23,20 @@
     <string name="task_detail">Task Detail</string>
     <string name="name">Name</string>
     <string name="image">Image</string>
+    <string name="team">Team</string>
+    <string name="list_task">list task</string>
+    <string name="teamname">TeamName</string>
+    <string name="team_name">team Name</string>
     <!--    <item name="delete_list" type="id">delete</item>-->
     <string-array name="tasks">
         <item>Task1</item>
         <item>Task2</item>
         <item>Task3</item>
+    </string-array>
+
+    <string-array name="teamNames">
+        <item>TeamA</item>
+        <item>TeamB</item>
+        <item>TeamC</item>
     </string-array>
 </resources>

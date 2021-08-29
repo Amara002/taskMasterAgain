@@ -8,9 +8,34 @@
 #  id: ID!
 #  content: String!
 #}
-type Task @model {
+#type Task
+#@model
+#@key(name: "TeamItem", fields: ["teamId"]){
+#  id: ID!
+#  title: String
+#  body: String
+#  state: String
+#  teamId : ID
+#}
+#type Team @model {
+#  id: ID!
+#  name: String!
+#  tasks: [Task] @connection(keyName: "TeamItem", fields: ["id"])
+#}
+type Task
+@model
+@key(name: "tasks", fields: ["teamId"])
+{
   id: ID!
-  title: String
-  body: String
-  state: String
+  teamId: ID!
+  title: String!
+  body: String!
+  state: String!
+  team: Team! @connection(fields: ["teamId"])
+}
+
+type Team @model {
+  id: ID!
+  teamName: String!
+  tasks: [Task] @connection(keyName: "tasks", fields: ["id"])
 }

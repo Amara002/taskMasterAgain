@@ -4,13 +4,18 @@
     <item
         android:id="@+id/allMenu"
         android:orderInCategory="100"
-        android:title="Setting"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/addMenu"
-        android:orderInCategory="200"
         android:title="List Task"
-        app:showAsAction="always"/>
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/Add_Task"
+        android:orderInCategory="200"
+        android:title="Add Task"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="200"
+        android:title="Settings"
+        app:showAsAction="never"/>
+
 
 </menu>
