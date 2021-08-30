@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Task Master App");
+//        setTitle("Task Master App");
 
         handler = new Handler(message -> {
             notifyDataSetChanged();
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        configureAmplify();
+//        configureAmplify();
 
 
 
@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String username = sharedPreferences.getString("username", "");
         String teamName = sharedPreferences.getString("teamName", "");
+        CharSequence myUserTitle = sharedPreferences.getString("UserNameLog", "");
+        setTitle(myUserTitle);
 
         if (!username.equals("")) {
             ((TextView) findViewById(R.id.textView)).setText(username + "'s Task");
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 false);
         taskRecyclerView.setLayoutManager(linearLayoutManager);
         taskRecyclerView.setAdapter(adapter);
+
     }
 
     private void configureAmplify() {
@@ -262,6 +265,16 @@ public class MainActivity extends AppCompatActivity {
             Intent settingsPage=new Intent(MainActivity.this,Setting.class);
             startActivity(settingsPage);
             return true;
+        }
+        if(id == R.id.signout){
+            Amplify.Auth.signOut(
+                    () -> {
+                        Log.i("AuthQuickstart", "Signed out successfully");
+                        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                        startActivity(intent);
+                    },
+                    error -> Log.e("AuthQuickstart", error.toString())
+            );
         }
 
         return super.onOptionsItemSelected(item);
