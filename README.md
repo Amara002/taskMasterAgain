@@ -13,4 +13,8 @@
 * Setting New User<br>
 ![settingNewUser](https://github.com/Amara002/taskMasterAgain/blob/newlab33/settingNewUser33.jpg)<br>
 * Main for New User in Same Team<br>
-![maintoNewUserSameTeam](https://github.com/Amara002/taskMasterAgain/blob/newlab33/maintoNewUserSameTeam33.jpg)
+![maintoNewUserSameTeam](https://github.com/Amara002/taskMasterAgain/blob/newlab33/maintoNewUserSameTeam33.jpg)<br>
+* AWS<br>
+![AWS1](https://github.com/Amara002/taskMasterAgain/blob/newlab33/AWS33(1).png)<br>
+![AWS2](https://github.com/Amara002/taskMasterAgain/blob/newlab33/AWS33(2).png)
+
