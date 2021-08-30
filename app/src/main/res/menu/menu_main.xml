@@ -16,6 +16,11 @@
         android:orderInCategory="200"
         android:title="Settings"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/signout"
+        android:orderInCategory="200"
+        android:title="Sign out"
+        app:showAsAction="never"/>
 
 
 </menu>

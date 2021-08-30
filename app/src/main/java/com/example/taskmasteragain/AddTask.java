@@ -108,7 +108,7 @@ public class AddTask extends AppCompatActivity {
 
         Toast toast = Toast.makeText(this, "submitted!", Toast.LENGTH_LONG);
         toast.show();
-       
+
     }
 
     private void getAllTeamsDataFromAPI() {
