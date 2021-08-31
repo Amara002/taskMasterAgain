@@ -27,6 +27,7 @@
     <string name="list_task">list task</string>
     <string name="teamname">TeamName</string>
     <string name="team_name">team Name</string>
+    <string name="upload_file">Upload File</string>
     <!--    <item name="delete_list" type="id">delete</item>-->
     <string-array name="tasks">
         <item>Task1</item>

@@ -17,10 +17,10 @@ public class TaskAdapter  extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
 
 //    private final List<TaskItem> taskItems;
-    private final List<TaskItem> taskItemLists;
+    private final List<Task> taskItemLists;
     private OnTaskItemClickListener listener;
 
-    public TaskAdapter(List<TaskItem> taskItemLists, OnTaskItemClickListener listener) {
+    public TaskAdapter(List<Task> taskItemLists, OnTaskItemClickListener listener) {
         this.taskItemLists = taskItemLists;
         this.listener = listener;
     }
@@ -41,11 +41,11 @@ public class TaskAdapter  extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
-        TaskItem item = taskItemLists.get(position);
+        Task item = taskItemLists.get(position);
         holder.title.setText(item.getTitle());
         holder.body.setText(item.getBody());
         holder.state.setText(item.getState());
-        holder.image.setImageResource(item.getImage());
+//        holder.image.setImageResource(item.getImage());
 
     }
 

@@ -35,7 +35,7 @@ public class ListTask extends AppCompatActivity {
 
 
     private static final String TAG = "TeamTasks";
-    private List<TaskItem> tasks;
+    private List<Task> tasks;
     private TaskAdapter adapter;
 
     private RecyclerView taskRecyclerView;
@@ -119,12 +119,12 @@ public class ListTask extends AppCompatActivity {
 
 
     private void getTeamTasksFromAPI(String teamName) {
-        Amplify.API.query(ModelQuery.list(com.amplifyframework.datastore.generated.model.Task.class),
+        Amplify.API.query(ModelQuery.list(Task.class),
                 response -> {
-                    for (com.amplifyframework.datastore.generated.model.Task task : response.getData()) {
+                    for (Task task : response.getData()) {
 
                         if ((task.getTeam().getTeamName()).equals(teamName)) {
-                            tasks.add(new TaskItem(task.getTitle(), task.getBody(), task.getState()));
+                            tasks.add(task);
                             Log.i(TAG, "onCreate: the Tasks DynamoDB are => " + task.getTitle());
                             Log.i(TAG, "onCreate: the team DynamoDB are => " + task.getTeam().getTeamName());
                         }
