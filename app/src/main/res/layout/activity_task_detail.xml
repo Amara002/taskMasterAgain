@@ -12,24 +12,25 @@
         android:id="@+id/taskTitle"
         android:layout_width="120dp"
         android:layout_height="80dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="56dp"
         android:text="@string/title"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.223"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/taskBody"
-        android:layout_width="196dp"
-        android:layout_height="74dp"
+        android:layout_width="152dp"
+        android:layout_height="41dp"
         android:text="@string/Body"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskTitle"
-        app:layout_constraintVertical_bias="0.177"
+        app:layout_constraintVertical_bias="0.083"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -39,9 +40,36 @@
         android:text="@string/task_detail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskBody"
-        app:layout_constraintVertical_bias="0.268"
+        app:layout_constraintVertical_bias="0.061"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/uploadfile"
+        android:layout_width="158dp"
+        android:layout_height="26dp"
+        android:text="Upload File"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskState"
+        app:layout_constraintVertical_bias="0.02"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageViewfile"
+        android:layout_width="112dp"
+        android:layout_height="103dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.541"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uploadfile"
+        app:layout_constraintVertical_bias="0.525"
+        tools:srcCompat="@tools:sample/avatars" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
