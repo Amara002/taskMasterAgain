@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "43354078871",
+    "project_id": "taskmasterproject-782ae",
+    "storage_bucket": "taskmasterproject-782ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43354078871:android:2317833f367d097a0df3d2",
+        "android_client_info": {
+          "package_name": "com.example.taskmasteragain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43354078871-vec4ii2jaas7ngm8kv9pf42e0ttue4fv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-bZVZdfb1qifk868O-Ep7ilpUdOAw2Ac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43354078871-vec4ii2jaas7ngm8kv9pf42e0ttue4fv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
